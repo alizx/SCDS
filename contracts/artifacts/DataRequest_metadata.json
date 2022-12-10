@@ -1,0 +1,92 @@
+{
+	"compiler": {
+		"version": "0.8.17+commit.8df45f5f"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "contract EntityProfile",
+						"name": "_requester",
+						"type": "address"
+					},
+					{
+						"internalType": "contract DataContract",
+						"name": "_dataset",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "revokeDataContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "signDataContract",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/DataRequest.sol": "DataRequest"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"contracts/DataContract.sol": {
+			"keccak256": "0xbcfbf4fa373b8fea18fca11285cbc06f1e1451326243ad46c42796a08129fa88",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://a89d2dcf54498350313b93ffcfe89aa2a407a883e8058c20008f42c14d8f6734",
+				"dweb:/ipfs/QmcmoKR9r2P7AdSkuSPfq4VqwhP6kwotDFcHGADdqLiAyz"
+			]
+		},
+		"contracts/DataRequest.sol": {
+			"keccak256": "0x3d7b0d5e733c9963882c9ad2ffeb26171d858870ac3619c9a813ab761c62d757",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://b095057e4e9a83e860645bbd079e159df8baf666b243611cc8c795c6e744079f",
+				"dweb:/ipfs/QmRDB6gweWeiMWxnVGbzaU53tfFGtUZ9zkhN1fPgmN2bR7"
+			]
+		},
+		"contracts/EntityProfile.sol": {
+			"keccak256": "0xab3570696b6155f30984f0191695a7cab67dbc55a0db5803833ceb76ff4e6aea",
+			"license": "UNLICENSED",
+			"urls": [
+				"bzz-raw://98e98be2859d54bb67e164173df3223b0b814bb29d2eff34d88c6bd058b09600",
+				"dweb:/ipfs/QmRMeScaLXTtUM8W8bgVHkg6hmX41sYGbwAGw1kybxABwf"
+			]
+		}
+	},
+	"version": 1
+}
