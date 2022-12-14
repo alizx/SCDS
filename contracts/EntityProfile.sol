@@ -4,6 +4,7 @@ pragma solidity ^0.8.12;
 import {DataContract} from "./DataContract.sol";
 
 contract EntityProfile {
+    address public owner;
     string public identifier;
     string public publicKey;
     DataContract[] private dataContracts;
@@ -22,8 +23,9 @@ contract EntityProfile {
     }
 
     function createDataContract(
-        string calldata _identifier
+        string calldata _identifier,
+        string calldata _url
     ) public returns (DataContract) {
-        return new DataContract(_identifier, this);
+        return new DataContract(_identifier, _url, this);
     }
 }

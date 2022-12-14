@@ -21,8 +21,11 @@ def create_chunk(directory, index, key):
     # decrypted_secret = f.decrypt(token)
     # print(decrypted_secret)
 
-    with open('{}/file_{}.bin'.format(directory, index), 'wb') as f:
+    file_name = '{}/file_{}.bin'.format(directory, index)
+    with open(file_name, 'wb') as f:
         f.write(token)
+    # Return the URL path of the file
+    return os.path.abspath(file_name)
 
 
 
@@ -38,11 +41,11 @@ def create_chunk(directory, index, key):
 
 
 def main():
-    data_owner = Entity("dataOwner", accounts[0])
-    data_requester = Entity("dataRequester", accounts[1])
+    owner = Entity("dataOwner", accounts[0])
+    requester = Entity("dataRequester", accounts[1])
 
-    data_owner_entity_instance = EntityProfile.deploy(data_owner.identifier, data_owner.public_key, {'from': data_owner.account})
-    EntityProfile.deploy(data_requester.identifier, data_requester.public_key, {'from': data_requester.account})
+    owner_entity = EntityProfile.deploy(owner.identifier, owner.public_key, {'from': owner.account})
+    requester_entity = EntityProfile.deploy(requester.identifier, requester.public_key, {'from': requester.account})
 
     #create the data and corresponding data contract
     key = "12345678901234567890123456789000".encode('ascii')
@@ -56,10 +59,21 @@ def main():
         os.makedirs(data_dir)
 
     # Create the 10 files and write the index of the file to each one
-    for i in range(10):
-        create_chunk(data_dir, i, key)
+    i = 0 # Chunk index
+    file_path = create_chunk(data_dir, i, key)
 
-    DataContract.deploy(data_owner.identifier, data_owner_entity_instance , {'from': data_owner.account})
+    create_data_contract_transaction = owner_entity.createDataContract("Dataset_1", file_path, {'from': owner.account})
+    data_contract = DataContract.at(create_data_contract_transaction.new_contracts[0])
+
+    # now the data requester wants to create a dataRequest for the above data set
+    create_data_request_transaction = data_contract.createDataRequest(requester_entity, {'from': requester.account})
+    data_request = DataRequest.at(create_data_request_transaction.new_contracts[0])
+
+    data_request.signDataContract("<encryptedKey>", {'from': owner.account})
+    print(data_request)
+
+    # data owner should sign the data request
+
 
 
 # if __name__ == "__main__":

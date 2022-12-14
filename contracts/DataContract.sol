@@ -6,17 +6,19 @@ import {DataRequest} from "./DataRequest.sol";
 
 contract DataContract {
     string public identifier;
+    string public url;
     EntityProfile public owner;
     uint256 public lastChunkIndex;
     DataRequest[] public dataRequests;
 
-    constructor(string memory _identifier, EntityProfile _owner) {
+    constructor(string memory _identifier, string memory _url,  EntityProfile _owner) {
         require(
             bytes(_identifier).length > 0,
             "Identifier cannot be emptu string."
         );
         identifier = _identifier;
         owner = _owner;
+        url = _url;
     }
 
     function createDataRequest(

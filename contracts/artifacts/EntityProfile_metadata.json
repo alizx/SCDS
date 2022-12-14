@@ -22,7 +22,18 @@
 				"type": "constructor"
 			},
 			{
-				"inputs": [],
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "_identifier",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_url",
+						"type": "string"
+					}
+				],
 				"name": "createDataContract",
 				"outputs": [
 					{
@@ -42,6 +53,19 @@
 						"internalType": "string",
 						"name": "",
 						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
 					}
 				],
 				"stateMutability": "view",
@@ -89,27 +113,27 @@
 	},
 	"sources": {
 		"contracts/DataContract.sol": {
-			"keccak256": "0xbcfbf4fa373b8fea18fca11285cbc06f1e1451326243ad46c42796a08129fa88",
+			"keccak256": "0x1a442509f4255632ae4be3c706950b7f18c15816242c6afdada068583df73093",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://a89d2dcf54498350313b93ffcfe89aa2a407a883e8058c20008f42c14d8f6734",
-				"dweb:/ipfs/QmcmoKR9r2P7AdSkuSPfq4VqwhP6kwotDFcHGADdqLiAyz"
+				"bzz-raw://37500181f957b768189b5b5f5b9e1e1a9dfaf5c291ab6006d41ee409fcdaaf83",
+				"dweb:/ipfs/QmU4hb5p1YiAMjfBGPVxmQsprwfCksUQuP8yR3twZgNU55"
 			]
 		},
 		"contracts/DataRequest.sol": {
-			"keccak256": "0x3d7b0d5e733c9963882c9ad2ffeb26171d858870ac3619c9a813ab761c62d757",
+			"keccak256": "0xefced567e4bf38cef7a4e0d367df0e4a867ef52a7d31606bb14c23fb8c42e7f0",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://b095057e4e9a83e860645bbd079e159df8baf666b243611cc8c795c6e744079f",
-				"dweb:/ipfs/QmRDB6gweWeiMWxnVGbzaU53tfFGtUZ9zkhN1fPgmN2bR7"
+				"bzz-raw://790db5c25e5197dd537d8c8c44541d56358bc11a748bf25e503c3fc8ec6226af",
+				"dweb:/ipfs/QmYusbgRBgxWUSuSUfQuL2Wj9eq5EACAVpPJiNvS1izKz5"
 			]
 		},
 		"contracts/EntityProfile.sol": {
-			"keccak256": "0xab3570696b6155f30984f0191695a7cab67dbc55a0db5803833ceb76ff4e6aea",
+			"keccak256": "0x664859a52d07d3a6199f5ea012524ccf2d763c7cc9fcfb7338e7cef643a3e81b",
 			"license": "UNLICENSED",
 			"urls": [
-				"bzz-raw://98e98be2859d54bb67e164173df3223b0b814bb29d2eff34d88c6bd058b09600",
-				"dweb:/ipfs/QmRMeScaLXTtUM8W8bgVHkg6hmX41sYGbwAGw1kybxABwf"
+				"bzz-raw://23ebe302735ef0c6f86c8ff83ca6e0eab288919715701ceb5144cd7e3a7c0150",
+				"dweb:/ipfs/Qmdr29U5HVnUjrnCiLhEYuqZHg2bsQYEEjFTXKGMs9ofcu"
 			]
 		}
 	},

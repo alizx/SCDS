@@ -9,19 +9,24 @@ contract DataRequest {
     EntityProfile requester;
     DataContract dataset;
     bool isActive = false;
-    string dataUrl;
-    string signedKey;
+    string encryptedKey;
 
     constructor(EntityProfile _requester, DataContract _dataset) {
         requester = _requester;
         dataset = _dataset;
     }
 
-    function signDataContract() public {
-
+    modifier onlyDataContractOwner() {
+        require(dataset.owner.address == msg.sender);
+        _;
     }
 
-    function revokeDataContract() public {
-        
+    function signDataContract(string calldata _encryptedKey) public onlyDataContractOwner {
+        encryptedKey = _encryptedKey;
+        isActive = true;
+    }
+
+    function revokeDataContract() public onlyDataContractOwner {
+         isActive = false;
     }
 }
