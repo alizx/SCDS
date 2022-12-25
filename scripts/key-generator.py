@@ -1,6 +1,7 @@
 import hashlib
 import os
 
+# stm: member state
 def unwind(stm) -> bytes:
     _stm = hashlib.sha1(stm)
     return _stm.digest()
@@ -14,6 +15,7 @@ class PublisherState:
     for i in reversed(list(range(0, mw-1))):
         self.stms[i] = unwind(self.stms[i+1])
 
+# stp: publisher state
 def wind(stp: PublisherState):
     stp.i += 1
     return (stp,stp.stms[stp.i])
