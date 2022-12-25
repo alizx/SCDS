@@ -5,11 +5,15 @@ import {EntityProfile} from "./EntityProfile.sol";
 import {DataContract} from "./DataContract.sol";
 
 contract DataRequest {
+    event OwnerChecked(address owner, address caller);
+    event DataContractSigned();
+    event DataContractRevoked();
+
     // string public identifier;
     EntityProfile requester;
     DataContract dataset;
     bool isActive = false;
-    string encryptedKey;
+    string public encryptedKey;
 
     constructor(EntityProfile _requester, DataContract _dataset) {
         requester = _requester;
@@ -17,16 +21,22 @@ contract DataRequest {
     }
 
     modifier onlyDataContractOwner() {
-        require(dataset.owner.address == msg.sender);
+        emit OwnerChecked(dataset.owner().ownerAddress(), msg.sender);
+        require(dataset.owner().ownerAddress() == msg.sender);
         _;
     }
 
-    function signDataContract(string calldata _encryptedKey) public onlyDataContractOwner {
+    function signDataContract(
+        string calldata _encryptedKey
+    ) public onlyDataContractOwner {
         encryptedKey = _encryptedKey;
         isActive = true;
+        emit DataContractSigned();
     }
 
     function revokeDataContract() public onlyDataContractOwner {
-         isActive = false;
+        isActive = false;
+        encryptedKey = "";
+        emit DataContractRevoked();
     }
 }

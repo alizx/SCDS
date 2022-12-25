@@ -4,7 +4,7 @@ pragma solidity ^0.8.12;
 import {DataContract} from "./DataContract.sol";
 
 contract EntityProfile {
-    address public owner;
+    address public ownerAddress;
     string public identifier;
     string public publicKey;
     DataContract[] private dataContracts;
@@ -18,6 +18,7 @@ contract EntityProfile {
             bytes(_publicKey).length > 0,
             "PublicKey cannot be of length zero."
         );
+        ownerAddress = msg.sender;
         identifier = _identifier;
         publicKey = _publicKey;
     }
