@@ -1,8 +1,10 @@
 from brownie import *
 from brownie import EntityProfile, DataContract, DataRequest
+
 import rsa
-from cryptography.fernet import Fernet, MultiFernet
+from cryptography.fernet import Fernet
 import base64, os
+from scripts.key_generator import PublisherState, keyder, unwind
 
 class Entity:
     def __init__(self, identifier, account):
@@ -28,14 +30,6 @@ def create_chunk(directory, index, key):
     return os.path.abspath(file_name)
 
 
-# # Use the public key to encrypt a sample string
-# sample_string = "This is a sample string"
-# encrypted_string = rsa.encrypt(sample_string.encode('ascii'), pubkey)
-
-# # Use the private key to decrypt the encrypted string
-# decrypted_string = rsa.decrypt(encrypted_string, privkey)
-
-
 
 def main():
     owner = Entity("dataOwner", accounts[0])
@@ -45,19 +39,20 @@ def main():
     requester_1_entity = EntityProfile.deploy(requester_1.identifier, requester_1.public_key, {'from': requester_1.account})
 
     # Create the data and corresponding data contract
-    key = "12345678901234567890123456789000".encode('ascii')
-    key = base64.urlsafe_b64encode(key)
-    #Fernet.generate_key()
-
+    ## create a key to encrypt the data
+    stp = PublisherState(5)
+    (stp, stm1) = stp.wind()
+    k1 = keyder(stm1).ljust(32, b'\x00')
+    k1 = base64.urlsafe_b64encode(k1)
 
     data_dir = '../data/dataset_1'
-    # Create the directory for dataset_1 files if it doesn't already exist
+    ## Create the directory for dataset_1 files if it doesn't already exist
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
 
-    # Create a data chuck and use it's index as content
+    ## Create a data chuck and use it's index as content
     i = 0 # Chunk index
-    file_1_path = create_chunk(data_dir, i, key)
+    file_1_path = create_chunk(data_dir, i, k1)
 
     tx = owner_entity.createDataContract("Dataset_1", file_1_path, {'from': owner.account})
     data_contract = DataContract.at(tx.new_contracts[0])
@@ -67,7 +62,7 @@ def main():
     data_request = DataRequest.at(tx.new_contracts[0])
 
     # data owner signs the request for data requester 1
-    encrypted_key = rsa.encrypt(key, requester_1.public_key)
+    encrypted_key = rsa.encrypt(k1, requester_1.public_key)
     ## Encode the encrypted key as a base64 string
     encrypted_key_str = base64.b64encode(encrypted_key).decode('utf-8')
     tx = data_request.signDataContract(encrypted_key_str, {'from': owner.account})
@@ -110,7 +105,7 @@ def main():
 
     # Data owener signs the data request 2 
     ## Encrypt the data key with the data owner's public key
-    encrypted_key = rsa.encrypt(key, requester_2.public_key)
+    encrypted_key = rsa.encrypt(k1, requester_2.public_key)
 
     ## Encode the encrypted key as a base64 string
     encrypted_key_str = base64.b64encode(encrypted_key).decode('utf-8')
@@ -147,24 +142,38 @@ def main():
 
 
     # Create a new data chunk and encrypt it with the k2 key
-    k2 = "abcdefghijklmnopqrstuvwxyz123456".encode('ascii')
+    ## generate the k2
+    (stp, stm2) = stp.wind()
+    k2 = keyder(stm2).ljust(32, b'\x00')
     k2 = base64.urlsafe_b64encode(k2)
+
     new_data_dir = '../data/dataset_1'
     i =+ 1
     file_2_path = create_chunk(new_data_dir, i, k2)
 
+    # User 1 receives the stm2
+    # Verify user 1 can obtain the k2 from stm2 and decrypt the new data chunk
+    # It should also be able to derive stm1 and subsequntly k1
 
-    # Verify user one can obtain the k2 and decrypt the new data chunk
-    #TODO: derive the k2 using key regression
-
+    k2 = keyder(stm2).ljust(32, b'\x00')
+    k2 = base64.urlsafe_b64encode(k2)
     with open(file_2_path, 'rb') as f:
         encrypted_chunk = f.read()
     fernet = Fernet(k2)
     decrypted_chunk = fernet.decrypt(encrypted_chunk)
-
-
     ## Assert that the decrypted data chunk is equal to the original content of the file
     expected_content = "This is the content for chunk 1".encode('ascii')
+    assert decrypted_chunk == expected_content, "Decrypted data does not match expected content"
+
+    stm1 = unwind(stm2)
+    k1 = keyder(stm1).ljust(32, b'\x00')
+    k1 = base64.urlsafe_b64encode(k1)
+    with open(file_1_path, 'rb') as f:
+        encrypted_chunk = f.read()
+    fernet = Fernet(k1)
+    decrypted_chunk = fernet.decrypt(encrypted_chunk)
+    ## Assert that the decrypted data chunk is equal to the original content of the file
+    expected_content = "This is the content for chunk 0".encode('ascii')
     assert decrypted_chunk == expected_content, "Decrypted data does not match expected content"
 
 
