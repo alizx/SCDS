@@ -9,6 +9,14 @@ contract EntityProfile {
     string public publicKey;
     DataContract[] private dataContracts;
 
+    modifier onlyOwner() {
+        require(
+            msg.sender == ownerAddress,
+            "Only the contract owner can call this function."
+        );
+        _;
+    }
+
     constructor(string memory _identifier, string memory _publicKey) {
         require(
             bytes(_identifier).length > 0,
@@ -26,7 +34,9 @@ contract EntityProfile {
     function createDataContract(
         string calldata _identifier,
         string calldata _url
-    ) public returns (DataContract) {
-        return new DataContract(_identifier, _url, this);
+    ) public onlyOwner returns (DataContract) {
+        DataContract newContract = new DataContract(_identifier, _url, this);
+        dataContracts.push(newContract);
+        return newContract;
     }
 }
