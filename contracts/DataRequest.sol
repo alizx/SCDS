@@ -10,9 +10,9 @@ contract DataRequest {
     event DataContractRevoked();
 
     // string public identifier;
-    EntityProfile requester;
-    DataContract dataset;
-    bool isActive = false;
+    EntityProfile public requester;
+    DataContract public dataset;
+    bool public isActive = false;
     string public encryptedKey;
 
     constructor(EntityProfile _requester, DataContract _dataset) {
