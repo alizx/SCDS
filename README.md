@@ -21,6 +21,8 @@ Once you installed pipenv use the command below to create a virtual environment 
 
     pipenv install
 
+Make sure `ganache-cli` is also installed If you want deploy the contracts on a development local blockchain.
+
 Once you have Python and the brownie package installed, you can run the system.py file by navigating to the directory where the file is located in your terminal or command prompt and typing:
 
     brownie run system.py
